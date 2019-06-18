@@ -14,7 +14,7 @@ __meta__ = {
 }
 
 [node name="block" type="Sprite" parent="Block1"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.0901961, 0.921569, 0.2, 1 )
 position = Vector2( 26, 26 )
 texture = ExtResource( 1 )
 
@@ -23,13 +23,12 @@ position = Vector2( 26, 26 )
 shape = SubResource( 1 )
 
 [node name="Block2" type="Area2D" parent="."]
-position = Vector2( -16, 16 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block2"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.0901961, 0.921569, 0.2, 1 )
 position = Vector2( 26, 26 )
 texture = ExtResource( 1 )
 
@@ -38,13 +37,13 @@ position = Vector2( 26, 26 )
 shape = SubResource( 1 )
 
 [node name="Block3" type="Area2D" parent="."]
-position = Vector2( -17, 49 )
+position = Vector2( -1, 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block3"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.0901961, 0.921569, 0.2, 1 )
 position = Vector2( 27, 9 )
 texture = ExtResource( 1 )
 
@@ -53,13 +52,13 @@ position = Vector2( 27, 9 )
 shape = SubResource( 1 )
 
 [node name="Block4" type="Area2D" parent="."]
-position = Vector2( -17, 65 )
+position = Vector2( 15, 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block4"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.0901961, 0.921569, 0.2, 1 )
 position = Vector2( 27, 9 )
 texture = ExtResource( 1 )
 
