@@ -16,6 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Tetris Clone"
+run/main_scene="res://modes/Main.tscn"
 config/icon="res://icon.png"
 
 [rendering]
