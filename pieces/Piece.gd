@@ -8,7 +8,6 @@ func _ready():
 
 func update_pieces_positions(null):
 	piece_blocks_positions = []
-	print(piece_blocks)
 	for i in piece_blocks:
 		piece_blocks_positions.append( i.global_position /16 )
 

@@ -16,7 +16,9 @@ func _ready():
 func _input(event):
 	if event is InputEventKey:
 		# TODO: listen to the inpts to move and rotate the piece
-		pass
+		_handle_piece_rotation()
+		_handle_horizontal_move()
+		_handle_bottom_move()
 		
 		
 func retrieve_piece():
@@ -31,35 +33,82 @@ func retrieve_piece():
 		self.add_child(piece)					
 
 func _handle_piece_rotation():
-	if Input.is_action_just_pressed("up"):
+	if Input.is_action_just_pressed("ui_up"):
 		self.rotation_degrees += rotation_default
 		update_grid()
 		
-func _move_piece_horizontal_action():
+func _handle_horizontal_move():
 	update_grid()
 	var LEFT : int = _move_piece_left()
 	var RIGHT : int = _move_piece_right()
+	
+	self.position += Vector2( ( RIGHT - LEFT ) * game.GRID_SIZE.x, 0 )
 
 func _move_piece_left():
-	# TODO
-	pass	
+	var LEFT : int = 0
+	
+	if get_child(0) != null:
+		for i in get_child(0).get_children():
+			if int((i.global_position.x+8) / game.GRID_SIZE.x ) == 0:
+				return 0
+				
+	LEFT = int( Input.is_action_just_pressed( "ui_left" ) )
+	
+	return LEFT	
 	
 func _move_piece_right():
-	# TODO
-	pass
+	var RIGHT : int = 0
+	
+	if get_child(0) != null:
+		for i in get_child(0).get_children():
+			if int((i.global_position.x +16)/ game.GRID_SIZE.x) == game.column:
+				return 0
+		
+	RIGHT = int( Input.is_action_just_pressed( "ui_right" ) )
+	
+	return RIGHT
+	
+func _handle_bottom_move():	
+	if Input.is_action_just_pressed( "ui_down" ):	
+		move_bottom()
+		
+func move_bottom():	
+	var botton_row = game.row
+	
+	update_grid()
+	if get_child(0) != null:
+		for i in get_child(0).piece_blocks_positions:
+			var one_block_position = i.y +.5
+			prints(botton_row, one_block_position,i)
+			if  one_block_position == botton_row:
+				place_piece()
+				return
+						
+	self.position.y += game.GRID_SIZE.y
 	
 func update_grid():
 	game.grid = game.create_grid(game.column, game.row, 0)
 	
 	if get_child(0) != null:
-		for i in get_child(0).pieces_positions:
-			if i.x < game.column && i.x > 0:
+		for i in get_child(0).piece_blocks_positions:
+			if i.x < game.column && i.x > 0:				
 				game.grid[int(i.y)][int(i.x)] = 1
 	
 	
+func place_piece():
+	var piece = get_child(0)
+	var piece_position = piece.global_position
+	var piece_rotation = piece.global_rotation
 	
+	remove_child(piece)
 	
+	piece.global_position = piece_position
+	piece.global_rotation = piece_rotation
 	
+	get_parent().add_child(piece)
+	
+	self.position = Vector2( OS.get_window_size().x/2+8, 8 )
+	retrieve_piece()
 	
 	
 	

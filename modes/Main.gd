@@ -11,12 +11,15 @@ onready var game_speed : float = 1
 onready var timer = $Timer
 
 func _ready():
-	$Timer.wait_time = 1.5 - (game_speed/10.0)
-	$Timer.start()
+	timer.wait_time = 1.5 - (game_speed/10.0)
+	timer.start()
 	
-	OS.set_window_size(Vector2(GRID_SIZE.x * column, GRID_SIZE.y * row))
+	OS.set_window_size(Vector2(GRID_SIZE.x * column, GRID_SIZE.y * row))	
 	
-	
+func _process(delta):
+	timer.wait_time = 1.5 - (game_speed/10.0)
+
+
 func create_grid(width, height, value) -> Array:
 	var a = []
 
