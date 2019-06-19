@@ -3,7 +3,8 @@ extends Node2D
 onready var game = get_tree().get_root().get_node( "Main" )
 # TODO: load the other pieces
 onready var pieces = ["res://pieces/I_Piece.tscn",
-					 "res://pieces/S_Piece.tscn"]
+					 "res://pieces/I_Piece.tscn",
+					 "res://pieces/I_Piece.tscn"]
 
 var rotation_default = 90
 
@@ -80,7 +81,7 @@ func move_bottom():
 		for i in get_child(0).piece_blocks_positions:
 			var one_block_position = i.y +.5
 			prints(botton_row, one_block_position,i)
-			if  one_block_position == botton_row:
+			if  one_block_position >= botton_row:
 				place_piece()
 				return
 						
@@ -90,8 +91,10 @@ func update_grid():
 	game.grid = game.create_grid(game.column, game.row, 0)
 	
 	if get_child(0) != null:
+		prints("SHOW TIME: ", get_child(0).global_position)
 		for i in get_child(0).piece_blocks_positions:
 			if i.x < game.column && i.x > 0:				
+				prints(i.x, i.y)
 				game.grid[int(i.y)][int(i.x)] = 1
 	
 	

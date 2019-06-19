@@ -3,54 +3,57 @@
 [ext_resource path="res://pieces/Piece.gd" type="Script" id=1]
 [ext_resource path="res://assets/block.png" type="Texture" id=2]
 
-[node name="I_Piece" type="Node2D"]
-position = Vector2( 0, -6 )
+[node name="T_Piece" type="Node2D"]
 z_index = 2
 script = ExtResource( 1 )
 
 [node name="Block1" type="Node2D" parent="."]
-position = Vector2( 8, -24 )
+position = Vector2( 0, -15 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block1"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block2" type="Node2D" parent="."]
-position = Vector2( 8, -8 )
+position = Vector2( 0, 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block2"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block3" type="Node2D" parent="."]
-position = Vector2( 8, 8 )
+position = Vector2( -16, 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block3"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block4" type="Node2D" parent="."]
-position = Vector2( 8, 24 )
+position = Vector2( 16, 1 )
 __meta__ = {
 "_edit_group_": true
 }
 
 [node name="block" type="Sprite" parent="Block4"]
-modulate = Color( 0.941176, 0.0235294, 0.0235294, 1 )
+modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2( 8, -8 )
+position = Vector2( 0, -7 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
-polygon = PoolVector2Array( -8, -24, -8, 40, 8, 40, 8, -24 )
+position = Vector2( 0, -8 )
+polygon = PoolVector2Array( 24, 24, 24, 8, 8, 8, 8, -8, -8, -8, -8, 8, -24, 8, -24, 24 )
 

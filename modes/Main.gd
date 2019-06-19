@@ -10,6 +10,9 @@ onready var grid : Array = create_grid(column, row, 0)
 onready var game_speed : float = 1
 onready var timer = $Timer
 
+var show_grid = true
+var draw_color = Color(123, 123, 123, 0.5)
+
 func _ready():
 	timer.wait_time = 1.5 - (game_speed/10.0)
 	timer.start()
@@ -19,8 +22,11 @@ func _ready():
 func _process(delta):
 	timer.wait_time = 1.5 - (game_speed/10.0)
 
+func _draw():
+	create_grid(column,row,0, show_grid)
+	
 
-func create_grid(width, height, value) -> Array:
+func create_grid(width, height, value, draw = false) -> Array:
 	var a = []
 
 	for y in range(height):
@@ -29,5 +35,23 @@ func create_grid(width, height, value) -> Array:
 
 		for x in range(width):
 			a[y][x] = value
+			# TODO: draw the line of the grid tile
+			if draw:
+				# draw vertical lines
+				var from = Vector2(x * GRID_SIZE.x, y * GRID_SIZE.y)
+				var to = Vector2(
+					x * GRID_SIZE.x,
+					(y * GRID_SIZE.y) + GRID_SIZE.y
+				)
+				
+				draw_line(from, to, draw_color, 1)
+				# draw horizontal lines
+				from = Vector2(x * GRID_SIZE.x, y * GRID_SIZE.y)
+				to = Vector2(
+					(x * GRID_SIZE.x) + GRID_SIZE.x,
+					y * GRID_SIZE.y
+				)
+				
+				draw_line(from, to, draw_color, 1)
 
 	return a
