@@ -4,11 +4,12 @@
 [ext_resource path="res://assets/block.png" type="Texture" id=2]
 
 [node name="T_Piece" type="Node2D"]
+scale = Vector2( 2, 2 )
 z_index = 2
 script = ExtResource( 1 )
 
 [node name="Block1" type="Node2D" parent="."]
-position = Vector2( 0, -15 )
+position = Vector2( 8, -24 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -18,7 +19,7 @@ modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block2" type="Node2D" parent="."]
-position = Vector2( 0, 1 )
+position = Vector2( 8, -8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -28,7 +29,7 @@ modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block3" type="Node2D" parent="."]
-position = Vector2( -16, 1 )
+position = Vector2( -8, -8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -38,7 +39,7 @@ modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block4" type="Node2D" parent="."]
-position = Vector2( 16, 1 )
+position = Vector2( 24, -8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -48,12 +49,10 @@ modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
 [node name="Area2D" type="Area2D" parent="."]
-position = Vector2( 0, -7 )
-__meta__ = {
-"_edit_group_": true
-}
+position = Vector2( 8, -16 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
 position = Vector2( 0, -8 )
 polygon = PoolVector2Array( 24, 24, 24, 8, 8, 8, 8, -8, -8, -8, -8, 8, -24, 8, -24, 24 )
 
+[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

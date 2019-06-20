@@ -1,23 +1,29 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://modes/Main.gd" type="Script" id=1]
 [ext_resource path="res://player/Player.gd" type="Script" id=2]
+[ext_resource path="res://assets/background.jpg" type="Texture" id=3]
 
 [node name="Main" type="Node2D"]
 position = Vector2( 0, -1 )
 script = ExtResource( 1 )
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2( 127, 50 )
+position = Vector2( 215, 196 )
 script = ExtResource( 2 )
+
+[node name="Board" type="Node2D" parent="."]
+visible = false
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="."]
-visible = false
+[node name="ColorRect" type="TextureRect" parent="."]
+show_behind_parent = true
+margin_left = 3.0
 margin_top = 1.0
-margin_right = 358.0
-margin_bottom = 603.0
-color = Color( 0, 0, 0, 1 )
+margin_right = 593.0
+margin_bottom = 779.0
+texture = ExtResource( 3 )
+expand = true
 
 [connection signal="timeout" from="Timer" to="Player" method="move_bottom"]

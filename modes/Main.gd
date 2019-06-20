@@ -1,40 +1,63 @@
 extends Node2D
 
-const GRID_SIZE = Vector2(16,16)
+const GRID_SIZE = Vector2(32,32)
 
-var row : int = 32
-var column : int = 16
+var row : int = 20
+var column : int = 10
+var offset_height = 3
+var offset_width = 2
 
-onready var grid : Array = create_grid(column, row, 0)
+var computed_board_row = row + offset_height
+var computed_board_column = column + offset_width
+var show_grid = true
+
+onready var occupied_blocks = []
+
+onready var grid : Dictionary = create_grid(column, row, 0, show_grid)
 
 onready var game_speed : float = 1
 onready var timer = $Timer
 
-var show_grid = true
-var draw_color = Color(123, 123, 123, 0.5)
+var draw_color = Color(123, 123, 123, 0.2)
 
-func _ready():
+func _ready():	
 	timer.wait_time = 1.5 - (game_speed/10.0)
 	timer.start()
-	
-	OS.set_window_size(Vector2(GRID_SIZE.x * column, GRID_SIZE.y * row))	
+	var board_width = GRID_SIZE.x * column
+	var board_height = GRID_SIZE.y * row
+	var ui_width = board_width / 2
+	#OS.set_window_size(Vector2(board_width + ui_width, GRID_SIZE.y * row))	
 	
 func _process(delta):
 	timer.wait_time = 1.5 - (game_speed/10.0)
 
 func _draw():
-	create_grid(column,row,0, show_grid)
+	draw_board_panel()
+	create_grid(column,row,0,show_grid)
 	
-
-func create_grid(width, height, value, draw = false) -> Array:
-	var a = []
-
-	for y in range(height):
-		a.append([])
-		a[y].resize(width)
-
-		for x in range(width):
-			a[y][x] = value
+func draw_board_panel():
+	# right
+	draw_line(
+		Vector2(GRID_SIZE.x * computed_board_column,offset_height * GRID_SIZE.y), 
+		Vector2(GRID_SIZE.x * computed_board_column,GRID_SIZE.y * computed_board_row),
+		draw_color,
+		1
+	)
+	# bottom
+	draw_line(
+		Vector2(GRID_SIZE.x * offset_width,GRID_SIZE.y * computed_board_row),
+		Vector2(GRID_SIZE.x * computed_board_column,GRID_SIZE.y * computed_board_row),
+		draw_color,
+		1
+	)	
+	
+func create_grid(width, height, value, draw, offset_h = offset_height, offset_w = offset_width) -> Dictionary:
+	var a = {}
+	for y in range(offset_h, offset_h + height):
+		a[str(y)] = {}
+		
+		for x in range(offset_w, offset_w + width):			
+			a[str(y)][str(x)] = value
 			# TODO: draw the line of the grid tile
 			if draw:
 				# draw vertical lines
@@ -52,6 +75,6 @@ func create_grid(width, height, value, draw = false) -> Array:
 					y * GRID_SIZE.y
 				)
 				
-				draw_line(from, to, draw_color, 1)
+				draw_line(from, to, draw_color, 1)		
 
 	return a
