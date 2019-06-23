@@ -2,11 +2,14 @@ extends Node2D
 
 onready var game = get_tree().get_root().get_node( "Main" )
 # TODO: load the other pieces
-onready var pieces = ["res://pieces/S_Piece.tscn",
-					 "res://pieces/Z_Piece.tscn",
-					 "res://pieces/I_Piece.tscn",
-					 "res://pieces/O_Piece.tscn",
-					 "res://pieces/T_Piece.tscn"]
+onready var pieces = [
+					"res://pieces/S_Piece.tscn",
+					"res://pieces/I_Piece.tscn",
+					"res://pieces/O_Piece.tscn",
+					"res://pieces/Z_Piece.tscn",
+					"res://pieces/T_Piece.tscn",
+					
+					]
 					
 var board_center = Vector2(224,160)
 
@@ -21,6 +24,7 @@ func _ready():
 
 
 func _input(event):
+	
 	if event is InputEventKey:
 		_handle_bottom_move()
 		_handle_piece_rotation()
@@ -52,9 +56,10 @@ func _handle_horizontal_move():
 	var RIGHT : int = _move_piece_right()
 	
 	var position_update = Vector2( ( RIGHT - LEFT ) * game.GRID_SIZE.x, 0 )
-	self.position += position_update 
+	var body = self.get_child(0).body
+	if not body.test_move(body.transform, self.position + position_update ):
+		self.position += position_update 
 		
-	print(self.position)
 	
 
 func _move_piece_left() -> int:
@@ -62,7 +67,9 @@ func _move_piece_left() -> int:
 	
 	if get_child(0) != null:
 		for i in get_child(0).get_children():
-			if int((i.global_position.x) / game.GRID_SIZE.x ) == game.offset_width:
+			var column_limit = int((i.global_position.x) / game.GRID_SIZE.x ) == game.offset_width
+			var next_move = Vector2(i.global_position.x - 32, i.global_position.y) 
+			if column_limit or not is_block_free(next_move):
 				return 0
 				
 	LEFT = int( Input.is_action_just_pressed( "ui_left" ) )
@@ -96,14 +103,17 @@ func move_bottom():
 		var t = get_child(0).piece_blocks_positions
 		for i in get_child(0).piece_blocks_positions:
 			var is_bottom_row = i.y +1 >= botton_row
-			var child = get_child(0)
-			var next_move = Vector2(i.x, i.y - 32)
-			if  is_bottom_row or not is_block_free(next_move):
+			if  is_bottom_row:
 				should_place = true
+	
+	var next_move = Vector2(self.position.x, self.position.y - game.GRID_SIZE.y)
+	var body = get_child(0).body
+	if body.test_move(body.transform, self.position):
+		should_place = true
 	
 	if should_place:
 		place_piece()			
-						
+		
 	self.position.y += game.GRID_SIZE.y
 	
 func update_grid():
@@ -112,7 +122,7 @@ func update_grid():
 	if get_child(0) != null:
 		for i in get_child(0).piece_blocks_positions:			
 			if i.x < game.computed_board_column && i.x > game.offset_width:				
-				print(get_child(0).get_child(0).global_position)
+
 				game.grid[str(int(i.y))][str(int(i.x))] = 1
 				
 		
@@ -129,13 +139,13 @@ func place_piece():
 		
 	remove_child(piece)
 	
-	piece.global_position = piece_position
+	piece.global_position = piece_position + Vector2(0.5, 2)
 	piece.global_rotation = piece_rotation
 	
 	get_parent().add_child(piece)	
 	game.occupied_blocks.append(blocks_positions)
 
-	self.position = Vector2( OS.get_window_size().x/2+8, 8 )
+	self.position = Vector2( OS.get_window_size().x/2+16, 16 )
 	retrieve_piece()
 	
 func round_to_ref(number, ref) -> int:

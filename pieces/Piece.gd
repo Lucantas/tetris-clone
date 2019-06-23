@@ -3,6 +3,7 @@ extends Node2D
 var is_colliding = false
 signal collide
 
+onready var body = $Body
 onready var piece_blocks = [$Block1, $Block2, $Block3, $Block4]
 onready var piece_blocks_positions = [] setget update_pieces_positions, get_pieces_positions
 
@@ -14,9 +15,12 @@ func _ready():
 
 func update_pieces_positions(null):
 	piece_blocks_positions = []
+	var idx = 0
 	for i in piece_blocks:
-		print("on piece: ", i.position)		
+		prints("on piece: ", i.position, global_position)	
+		#i.position.x=0 	
 		piece_blocks_positions.append( i.global_position / _grid_size_reference )
+		idx += 1
 
 func get_pieces_positions():
 	update_pieces_positions(null)
