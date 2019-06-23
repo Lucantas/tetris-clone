@@ -26,4 +26,24 @@ margin_bottom = 779.0
 texture = ExtResource( 3 )
 expand = true
 
+[node name="RestartBtn" type="Button" parent="."]
+margin_left = 447.0
+margin_top = 264.0
+margin_right = 576.0
+margin_bottom = 307.0
+hint_tooltip = "Restart the match"
+text = "Restart"
+
+[node name="PauseBtn" type="Button" parent="."]
+margin_left = 447.0
+margin_top = 326.0
+margin_right = 576.0
+margin_bottom = 369.0
+hint_tooltip = "Restart the match"
+text = "Pause"
+
+[node name="PieceHolder" type="Node2D" parent="."]
+
 [connection signal="timeout" from="Timer" to="Player" method="move_bottom"]
+[connection signal="button_up" from="RestartBtn" to="." method="_on_RestartBtn_button_up"]
+[connection signal="button_up" from="PauseBtn" to="." method="_on_PauseBtn_button_up"]

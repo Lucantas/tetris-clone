@@ -18,7 +18,7 @@ onready var grid : Dictionary = create_grid(column, row, 0, show_grid)
 onready var game_speed : float = 1
 onready var timer = $Timer
 
-var draw_color = Color(123, 123, 123, 0.2)
+var draw_color = Color(123, 123, 123, 0.1)
 
 func _ready():	
 	timer.wait_time = 1.5 - (game_speed/10.0)
@@ -78,3 +78,33 @@ func create_grid(width, height, value, draw, offset_h = offset_height, offset_w 
 				draw_line(from, to, draw_color, 1)		
 
 	return a
+	
+#TODO: Separate ui stuff
+func _on_RestartBtn_button_up():
+	new_game()
+
+func new_game():
+	clear_table()
+	$Player.retrieve_piece()
+	play()
+	
+func clear_table():
+	# iterate over children nodes in order to delete them
+	$Player.clear()
+	for i in $PieceHolder.get_children():
+	    i.queue_free()
+	occupied_blocks.clear()
+
+func _on_PauseBtn_button_up():
+	if $PauseBtn.text.to_upper() == "PLAY":
+		play()
+	else:
+		pause()
+
+func pause():
+	$PauseBtn.text = "Play"
+	timer.stop()
+	
+func play():
+	$PauseBtn.text = "Pause"
+	timer.start()

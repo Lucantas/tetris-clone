@@ -48,11 +48,10 @@ __meta__ = {
 modulate = Color( 0.996078, 0, 0.933333, 1 )
 texture = ExtResource( 2 )
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Body" type="KinematicBody2D" parent="."]
 position = Vector2( 8, -16 )
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body"]
 position = Vector2( 0, -8 )
 polygon = PoolVector2Array( 24, 24, 24, 8, 8, 8, 8, -8, -8, -8, -8, 8, -24, 8, -24, 24 )
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

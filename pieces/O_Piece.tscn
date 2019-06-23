@@ -7,14 +7,12 @@
 extents = Vector2( 16, 16 )
 
 [node name="O_Piece" type="Node2D"]
-modulate = Color( 0.85098, 1, 0, 1 )
-position = Vector2( 0, -2 )
 scale = Vector2( 2, 2 )
 z_index = 2
 script = ExtResource( 1 )
 
 [node name="Block1" type="Node2D" parent="."]
-position = Vector2( -8, -7 )
+position = Vector2( -8, -8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -24,7 +22,7 @@ modulate = Color( 0.921569, 1, 0, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block2" type="Node2D" parent="."]
-position = Vector2( 8, -7 )
+position = Vector2( 8, -8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -34,7 +32,7 @@ modulate = Color( 0.921569, 1, 0, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block3" type="Node2D" parent="."]
-position = Vector2( -8, 9 )
+position = Vector2( -8, 8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -44,7 +42,7 @@ modulate = Color( 0.921569, 1, 0, 1 )
 texture = ExtResource( 2 )
 
 [node name="Block4" type="Node2D" parent="."]
-position = Vector2( 8, 9 )
+position = Vector2( 8, 8 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -53,14 +51,8 @@ __meta__ = {
 modulate = Color( 0.921569, 1, 0, 1 )
 texture = ExtResource( 2 )
 
-[node name="Area2D" type="Area2D" parent="."]
-position = Vector2( 0, 1.5 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="Body" type="KinematicBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2( 0, -0.5 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Body"]
 shape = SubResource( 1 )
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]

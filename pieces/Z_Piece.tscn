@@ -54,9 +54,8 @@ modulate = Color( 1, 0, 0, 1 )
 show_behind_parent = true
 texture = ExtResource( 2 )
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Body" type="KinematicBody2D" parent="."]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Body"]
 polygon = PoolVector2Array( -32, -16, 0, -16, 0, 0, 16, 0, 16, 16, -16, 16, -16, 0, -32, 0 )
 
-[connection signal="area_entered" from="Area2D" to="." method="_on_Area2D_area_entered"]
