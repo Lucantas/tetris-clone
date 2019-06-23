@@ -36,8 +36,8 @@ func retrieve_piece():
 		temp = load(next_piece)
 		piece = temp.instance()		
 		self.add_child(piece)		
-		self.position = board_center			
-		print(self.get_child(0).position)
+		self.position = board_center	
+		self.get_child(0).position = Vector2(0,0)		
 		
 		can_move = true	
 
@@ -51,9 +51,13 @@ func _handle_horizontal_move():
 	var LEFT : int = _move_piece_left()
 	var RIGHT : int = _move_piece_right()
 	
-	self.position += Vector2( ( RIGHT - LEFT ) * game.GRID_SIZE.x, 0 )
+	var position_update = Vector2( ( RIGHT - LEFT ) * game.GRID_SIZE.x, 0 )
+	self.position += position_update 
+		
+	print(self.position)
+	
 
-func _move_piece_left():
+func _move_piece_left() -> int:
 	var LEFT : int = 0
 	
 	if get_child(0) != null:
@@ -106,9 +110,12 @@ func update_grid():
 	game.grid = game.create_grid(game.column, game.row, 0, false)
 	var game_grid = game.grid
 	if get_child(0) != null:
-		for i in get_child(0).piece_blocks_positions:
+		for i in get_child(0).piece_blocks_positions:			
 			if i.x < game.computed_board_column && i.x > game.offset_width:				
+				print(get_child(0).get_child(0).global_position)
 				game.grid[str(int(i.y))][str(int(i.x))] = 1
+				
+		
 	
 	
 func place_piece():
@@ -131,6 +138,8 @@ func place_piece():
 	self.position = Vector2( OS.get_window_size().x/2+8, 8 )
 	retrieve_piece()
 	
+func round_to_ref(number, ref) -> int:
+    return int(number) if number > ref else ref
 	
 func is_block_free(block_position : Vector2) -> bool:
 	for blocks in game.occupied_blocks:

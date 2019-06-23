@@ -15,6 +15,7 @@ func _ready():
 func update_pieces_positions(null):
 	piece_blocks_positions = []
 	for i in piece_blocks:
+		print("on piece: ", i.position)		
 		piece_blocks_positions.append( i.global_position / _grid_size_reference )
 
 func get_pieces_positions():
