@@ -3,11 +3,11 @@ extends Node2D
 onready var game = get_tree().get_root().get_node( "Main" )
 # TODO: load the other pieces
 onready var pieces = [
-					"res://pieces/S_Piece.tscn",
+					#"res://pieces/S_Piece.tscn",
 					"res://pieces/I_Piece.tscn",
-					"res://pieces/O_Piece.tscn",
-					"res://pieces/Z_Piece.tscn",
-					"res://pieces/T_Piece.tscn",
+					#"res://pieces/O_Piece.tscn",
+					#"res://pieces/Z_Piece.tscn",
+					#"res://pieces/T_Piece.tscn",
 					
 					]
 					
@@ -41,7 +41,7 @@ func retrieve_piece():
 		piece = temp.instance()		
 		self.add_child(piece)		
 		self.position = board_center	
-		self.get_child(0).position = Vector2(0,0)		
+		self.get_child(0).position = Vector2(0,0)				
 		
 		can_move = true	
 
@@ -102,32 +102,31 @@ func move_bottom():
 	if get_child(0) != null:
 		var t = get_child(0).piece_blocks_positions
 		for i in get_child(0).piece_blocks_positions:
-			var is_bottom_row = i.y +1 >= botton_row
+			var is_bottom_row = i.y + 1 >= botton_row
 			if  is_bottom_row:
 				should_place = true
-	
-	var next_move = Vector2(self.position.x, self.position.y - game.GRID_SIZE.y)
-	var body = get_child(0).body
-	if body.test_move(body.transform, self.position):
-		should_place = true
+		
+		var next_move = Vector2(self.position.x, self.position.y - game.GRID_SIZE.y)
+		var body = get_child(0).body
+
+		if body.test_move(body.transform, next_move):
+			should_place = true			
+		
 	
 	if should_place:
 		place_piece()			
 		
 	self.position.y += game.GRID_SIZE.y
 	
+
 func update_grid():
 	game.grid = game.create_grid(game.column, game.row, 0, false)
 	var game_grid = game.grid
 	if get_child(0) != null:
 		for i in get_child(0).piece_blocks_positions:			
 			if i.x < game.computed_board_column && i.x > game.offset_width:				
-
 				game.grid[str(int(i.y))][str(int(i.x))] = 1
-				
-		
-	
-	
+					
 func place_piece():
 	var piece = get_child(0)
 	var piece_position = piece.global_position
@@ -139,7 +138,7 @@ func place_piece():
 		
 	remove_child(piece)
 	
-	piece.global_position = piece_position + Vector2(0.5, 2)
+	piece.global_position = piece_position # + Vector2(0.5, 2)
 	piece.global_rotation = piece_rotation
 	
 	get_parent().add_child(piece)	

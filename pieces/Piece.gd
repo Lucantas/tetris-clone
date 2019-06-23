@@ -17,8 +17,7 @@ func update_pieces_positions(null):
 	piece_blocks_positions = []
 	var idx = 0
 	for i in piece_blocks:
-		prints("on piece: ", i.position, global_position)	
-		#i.position.x=0 	
+		prints(i.get_node("block").get_rect().size.x)
 		piece_blocks_positions.append( i.global_position / _grid_size_reference )
 		idx += 1
 
@@ -26,8 +25,5 @@ func get_pieces_positions():
 	update_pieces_positions(null)
 	return piece_blocks_positions
 
-func _on_Area2D_area_entered(area):
-	is_colliding = true
-	emit_signal("collide")
 
 	
