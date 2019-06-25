@@ -10,7 +10,7 @@ onready var pieces = [
 					"res://pieces/T_Piece.tscn",					
 					]
 					
-var board_center = Vector2(224,160)
+var board_center = Vector2(222,160)
 
 var rotation_default = 270
 
@@ -66,7 +66,7 @@ func _move_piece_left() -> int:
 		for i in get_child(0).get_children():
 			var column_limit = int((i.global_position.x) / game.GRID_SIZE.x ) == game.offset_width
 			var next_move = Vector2(i.global_position.x - 32, i.global_position.y) 
-			if column_limit or not is_block_free(next_move):
+			if column_limit or not game.is_block_free(next_move):
 				return 0
 				
 	LEFT = int( Input.is_action_just_pressed( "ui_left" ) )
@@ -80,7 +80,7 @@ func _move_piece_right():
 		for i in get_child(0).get_children():
 			var column_limit = int((i.global_position.x +32)/ game.GRID_SIZE.x) == game.computed_board_column
 			var next_move = Vector2(i.global_position.x + 32, i.global_position.y) 
-			if column_limit or not is_block_free(next_move):
+			if column_limit or not game.is_block_free(next_move):
 				return 0
 		
 	RIGHT = int( Input.is_action_just_pressed( "ui_right" ) )
@@ -102,7 +102,7 @@ func move_bottom():
 			var is_bottom_row = i.global_position.y + 1 >= botton_row
 			var next_move = Vector2(i.global_position.x, i.global_position.y + game.GRID_SIZE.y)				
 			
-			if  is_bottom_row or not is_block_free(next_move):
+			if  is_bottom_row or not game.is_block_free(next_move):
 				should_place = true
 			
 	
@@ -115,14 +115,10 @@ func move_bottom():
 func update_grid():
 	fix_position()
 	game.grid = game.create_grid(game.column, game.row, 0, false)
-	var game_grid = game.grid
-	if get_child(0) != null:
-		for piece in get_child(0).piece_blocks:	
-			var i = piece.global_position
-			if i.x < game.computed_board_column && i.x > game.offset_width:				
-				game.grid[str(int(i.y))][str(int(i.x))] = 1
+	
 					
 func place_piece():
+	fix_position()
 	var piece = get_child(0)
 	var piece_position = piece.global_position
 	var piece_rotation = piece.global_rotation
@@ -132,9 +128,9 @@ func place_piece():
 	
 	remove_child(piece)
 	
-	piece.global_position = piece_position # + Vector2(0.5, 2)
-	piece.global_rotation = piece_rotation
 	get_parent().get_node("PieceHolder").add_child(piece)	
+	piece.global_rotation = piece_rotation
+	piece.global_position = piece_position # + Vector2(0.5, 2)
 
 	self.position = Vector2( OS.get_window_size().x/2+16, 16 )
 	retrieve_piece()
@@ -153,13 +149,7 @@ func round_to_nearest_multiple( n, multiple_ref = 32 ):
 	
 func round_to_ref(number, ref) -> int:
     return int(number) if number > ref else ref
-	
-func is_block_free(block_position : Vector2) -> bool:
-	
-	for i in game.occupied_blocks:
-		if i.round() == block_position.round():
-			return false
-	return true
+
 	
 func fix_position():
 	#self.position = board_center	
