@@ -11,8 +11,6 @@ var computed_board_row = row + offset_height
 var computed_board_column = column + offset_width
 var show_grid = true
 
-onready var occupied_blocks = []
-
 onready var grid : Dictionary = create_grid(column, row, 0, show_grid)
 
 onready var game_speed : float = 1
@@ -52,12 +50,11 @@ func draw_board_panel():
 	)	
 	
 func is_block_free(block_position : Vector2) -> bool:
-	
-	for i in occupied_blocks:
-		if i.round() == block_position.round():
-			return false
+	for piece in $PieceHolder.get_children():
+		for block in piece.get_children():
+			if block.global_position.round() == block_position.round():
+				return false
 	return true
-	
 	
 func create_grid(width, height, value, draw, offset_h = offset_height, offset_w = offset_width) -> Dictionary:
 	var a = {}
@@ -68,7 +65,7 @@ func create_grid(width, height, value, draw, offset_h = offset_height, offset_w 
 		for x in range(offset_w, offset_w + width):			
 			var pos = Vector2((x * GRID_SIZE.x) + 16, (y * GRID_SIZE.y) + 16)
 			a[str(y)][str(x)] = 0 if is_block_free(pos) else 1		 
-			if a[str(y)][str(x)] == 1:
+			if not is_block_free(pos):
 				row_blocks.append(pos)
 				
 			if draw:
@@ -98,20 +95,25 @@ func create_grid(width, height, value, draw, offset_h = offset_height, offset_w 
 			
 			# loop over the blocks in the array
 			var row_to_drop
-			for pos in row_blocks:
-				# remove all the blocks from the occupied blocks
-				occupied_blocks.remove(occupied_blocks.find(pos))				
+			for pos in row_blocks:			
 				# remove all the blocks with that position from the PieceHolder
 				row_to_drop = pos.y
-			
+				
+			for x in range(offset_w, offset_w + width):					
+				a[str(y)][str(x)] = 0
 			clear_row(row_to_drop)			
+									
+			
 		
 	return a
 	
 func clear_row(row):
 	fix_position()
+	#TODO: optimization of this method, do all that is needed from the 
+	# $PieceHolder children on one loop
 	for piece in $PieceHolder.get_children():
 		for block in piece.get_children():
+			var t = block.global_position
 			if block.global_position.y == row:
 				block.queue_free()
 				
@@ -120,11 +122,6 @@ func clear_row(row):
 		for block in piece.get_children():
 			if block.global_position.y < row:
 				block.global_position.y = block.global_position.y + GRID_SIZE.y
-				
-	occupied_blocks = []
-	for piece in $PieceHolder.get_children():
-		for block in piece.get_children():
-			occupied_blocks.append(block.global_position)
 				
 func fix_position():
 	$Player.fix_position()
@@ -151,7 +148,6 @@ func clear_table():
 	$Player.clear()
 	for i in $PieceHolder.get_children():
 		i.queue_free()
-	occupied_blocks.clear()
 	
 
 func _on_PauseBtn_button_up():
