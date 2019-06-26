@@ -10,7 +10,7 @@ onready var pieces = [
 					"res://pieces/T_Piece.tscn",					
 					]
 					
-var board_center = Vector2(222,160)
+var board_center = Vector2(222,128)
 
 var rotation_default = 270
 
@@ -23,12 +23,13 @@ func _ready():
 
 
 func _input(event):
-	
-	if event is InputEventKey:
-		_handle_bottom_move()
-		_handle_piece_rotation()
-		_handle_horizontal_move()
-		
+	# don't handle input if the game is stopped
+	if not game.paused:
+		if event is InputEventKey:
+			_handle_bottom_move()
+			_handle_piece_rotation()
+			_handle_horizontal_move()
+			
 func retrieve_piece():
 	var temp
 	var piece
@@ -38,7 +39,8 @@ func retrieve_piece():
 		var next_piece = str(pieces[randi() % pieces.size()])		
 		temp = load(next_piece)
 		piece = temp.instance()		
-		self.add_child(piece)				
+		self.add_child(piece)					
+		handle_block_visibility(piece)	
 		self.position = board_center	
 		can_move = true	
 
@@ -69,7 +71,7 @@ func _move_piece_left() -> int:
 			if column_limit or not game.is_block_free(next_move):
 				return 0
 				
-	LEFT = int( Input.is_action_just_pressed( "ui_left" ) )
+	LEFT = int( Input.is_action_pressed( "ui_left" ) )
 	
 	return LEFT	
 	
@@ -83,12 +85,12 @@ func _move_piece_right():
 			if column_limit or not game.is_block_free(next_move):
 				return 0
 		
-	RIGHT = int( Input.is_action_just_pressed( "ui_right" ) )
+	RIGHT = int( Input.is_action_pressed( "ui_right" ) )
 	
 	return RIGHT
 	
 func _handle_bottom_move():	
-	if Input.is_action_just_pressed( "ui_down" ):	
+	if Input.is_action_pressed( "ui_down" ):	
 		move_bottom()
 		
 func move_bottom():	
@@ -115,6 +117,18 @@ func move_bottom():
 func update_grid():
 	fix_position()
 	game.grid = game.create_grid(game.column, game.row, 0, false)
+	handle_block_visibility(null)
+	
+func handle_block_visibility(piece):
+	var node = self.get_child(0) if piece == null else piece
+	for block in node.piece_blocks:
+		var sprite = block.get_node("block")
+		print(block.global_position.y)
+		if block.global_position.y < 80:
+			sprite.hide()
+		else:
+			sprite.show()
+		
 	
 					
 func place_piece():
@@ -122,9 +136,6 @@ func place_piece():
 	var piece = get_child(0)
 	var piece_position = piece.global_position
 	var piece_rotation = piece.global_rotation
-	
-	for block in piece.get_children():
-		game.occupied_blocks.append(block.global_position)
 	
 	remove_child(piece)
 	
@@ -159,8 +170,32 @@ func fix_position():
 			round_to_nearest_multiple(i.global_position.x,16), 
 			round_to_nearest_multiple(i.global_position.y, 16)
 		)
-			
+
+"""
+TODO: Tetromino start locations
+
+    The I and O spawn in the middle columns
+    The rest spawn in the left-middle columns
+    The tetriminoes spawn horizontally with J, L and T spawning flat-side first.
+    Spawn above playfield, row 21 for I, and 21/22 for all other tetriminoes.
+    Immediately drop one space if no existing Block is in its path 			
+"""
+
+func set_drop_spot(piece_name):
+	var shape = piece_name.split("_Piece")
+	match shape:
+		"I", "O":
+			pass # spawn in the middle columns vertically
+		"J", "L", "T":
+			pass # spawn horizontally with flat-side first
+		_:
+			pass # spawn at the left-middle columns vertically
+		
+				
+		
 	
+	
+
 func clear():
 	for i in get_children():
 		remove_child(i)

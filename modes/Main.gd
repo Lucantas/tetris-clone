@@ -4,6 +4,7 @@ const GRID_SIZE = Vector2(32,32)
 
 var row : int = 20
 var column : int = 10
+var paused : bool = false
 var offset_height = 3
 var offset_width = 2
 
@@ -59,14 +60,18 @@ func is_block_free(block_position : Vector2) -> bool:
 func create_grid(width, height, value, draw, offset_h = offset_height, offset_w = offset_width) -> Dictionary:
 	var a = {}
 	for y in range(offset_h, offset_h + height):
+			
 		var row_blocks = [] # hold blocks with value 1 
 		a[str(y)] = {}
 		
-		for x in range(offset_w, offset_w + width):			
+		for x in range(offset_w, offset_w + width):						
 			var pos = Vector2((x * GRID_SIZE.x) + 16, (y * GRID_SIZE.y) + 16)
 			a[str(y)][str(x)] = 0 if is_block_free(pos) else 1		 
 			if not is_block_free(pos):
 				row_blocks.append(pos)
+				# check if is on ceiling
+				if y == offset_h:
+					game_over()
 				
 			if draw:
 				# draw vertical lines
@@ -123,6 +128,7 @@ func clear_row(row):
 			if block.global_position.y < row:
 				block.global_position.y = block.global_position.y + GRID_SIZE.y
 				
+				
 func fix_position():
 	$Player.fix_position()
 	for piece in $PieceHolder.get_children():
@@ -156,10 +162,24 @@ func _on_PauseBtn_button_up():
 	else:
 		pause()
 
-func pause():
-	$PauseBtn.text = "Play"
+func pause(change_text=true):
+	paused = true
+	$PauseBtn.text = "Play" if change_text else $PauseBtn.text
 	timer.stop()
 	
 func play():
+	paused = false
 	$PauseBtn.text = "Pause"
 	timer.start()
+	
+func game_over():
+	pause(false)
+	$PauseBtn.disabled = true
+	$GameOverWdw.popup()
+
+func _on_Cancel_button_up():
+	$GameOverWdw.hide()
+
+func _on_Confirm_button_up():
+	$GameOverWdw.hide()
+	new_game()

@@ -17,7 +17,7 @@ visible = false
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="ColorRect" type="TextureRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
 show_behind_parent = true
 margin_left = 3.0
 margin_top = 1.0
@@ -44,6 +44,38 @@ text = "Pause"
 
 [node name="PieceHolder" type="Node2D" parent="."]
 
+[node name="GameOverWdw" type="WindowDialog" parent="."]
+visible = true
+light_mask = 12287
+margin_left = 191.0
+margin_top = 285.0
+margin_right = 391.0
+margin_bottom = 355.0
+window_title = "Tetris Clone"
+
+[node name="Label" type="Label" parent="GameOverWdw"]
+margin_left = 71.0
+margin_top = 22.0
+margin_right = 133.0
+margin_bottom = 36.0
+text = "Try again?"
+
+[node name="Cancel" type="Button" parent="GameOverWdw"]
+margin_left = 124.0
+margin_top = 44.0
+margin_right = 187.0
+margin_bottom = 64.0
+text = "No"
+
+[node name="Confirm" type="Button" parent="GameOverWdw"]
+margin_left = 14.0
+margin_top = 44.0
+margin_right = 77.0
+margin_bottom = 64.0
+text = "Yes"
+
 [connection signal="timeout" from="Timer" to="Player" method="move_bottom"]
 [connection signal="button_up" from="RestartBtn" to="." method="_on_RestartBtn_button_up"]
 [connection signal="button_up" from="PauseBtn" to="." method="_on_PauseBtn_button_up"]
+[connection signal="button_up" from="GameOverWdw/Cancel" to="." method="_on_Cancel_button_up"]
+[connection signal="button_up" from="GameOverWdw/Confirm" to="." method="_on_Confirm_button_up"]
