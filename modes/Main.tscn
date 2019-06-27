@@ -45,7 +45,6 @@ text = "Pause"
 [node name="PieceHolder" type="Node2D" parent="."]
 
 [node name="GameOverWdw" type="WindowDialog" parent="."]
-visible = true
 light_mask = 12287
 margin_left = 191.0
 margin_top = 285.0
