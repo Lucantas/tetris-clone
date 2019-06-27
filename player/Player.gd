@@ -13,6 +13,8 @@ onready var pieces = [
 					]
 					
 var board_center = Vector2(222,128)
+var hand_limit = 3
+var pieces_on_hand = [] # Queue
 
 var rotation_default = 270
 
@@ -32,21 +34,32 @@ func _input(event):
 			_handle_piece_rotation()
 			_handle_horizontal_move()
 			
-func retrieve_piece():
+func retrieve_piece(hold = false):
 	var temp
 	var piece
-
+	var next_piece
+	
+	update_hand()
+		
+	piece = pieces_on_hand[0].instance()	
+	pieces_on_hand.remove(0)
+	
+	update_hand()
 	# make sure to only retrieve a piece when there is no other with the player
-	if get_child_count() == 0:		
-		var next_piece = str(pieces[randi() % pieces.size()])		
-		temp = load(next_piece)
-		piece = temp.instance()		
+	if get_child_count() == 0:				
 		self.add_child(piece)					
 		handle_block_visibility(piece)	
 		self.rotation_degrees = 0
 		self.position = board_center	
 		can_move = true	
-
+		
+	game.update_next_piece(pieces_on_hand[0].instance())
+	
+func update_hand():
+	if len(pieces_on_hand) < hand_limit:
+		# if there is not, random the pieces array to get one
+		pieces_on_hand.append(load(str(pieces[randi() % pieces.size()])))
+	 
 func _handle_piece_rotation():
 	if Input.is_action_just_pressed("ui_up"):
 		self.rotation_degrees += rotation_default
@@ -117,7 +130,6 @@ func move_bottom():
 		place_piece()			
 		
 	self.position.y += game.GRID_SIZE.y
-	
 
 func update_grid():
 	fix_position()

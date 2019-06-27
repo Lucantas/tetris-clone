@@ -110,7 +110,13 @@ func create_grid(width, height, value, draw, offset_h = offset_height, offset_w 
 									
 			
 		
-	return a
+	return a	
+
+func update_next_piece(piece):
+	for i in $NextPiece.get_children():
+		i.queue_free()
+	piece.transform = piece.transform.scaled(Vector2(0.5,.5))
+	$NextPiece.add_child(piece)
 	
 func clear_row(row):
 	fix_position()

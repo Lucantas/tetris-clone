@@ -45,6 +45,7 @@ text = "Pause"
 [node name="PieceHolder" type="Node2D" parent="."]
 
 [node name="GameOverWdw" type="WindowDialog" parent="."]
+editor/display_folded = true
 light_mask = 12287
 margin_left = 191.0
 margin_top = 285.0
@@ -72,6 +73,9 @@ margin_top = 44.0
 margin_right = 77.0
 margin_bottom = 64.0
 text = "Yes"
+
+[node name="NextPiece" type="Node2D" parent="."]
+position = Vector2( 507, 192 )
 
 [connection signal="timeout" from="Timer" to="Player" method="move_bottom"]
 [connection signal="button_up" from="RestartBtn" to="." method="_on_RestartBtn_button_up"]
