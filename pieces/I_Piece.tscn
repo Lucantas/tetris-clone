@@ -8,7 +8,6 @@ extents = Vector2( 8, 32 )
 
 [node name="I_Piece" type="Node2D"]
 scale = Vector2( 2, 2 )
-z_index = 2
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_group_": true

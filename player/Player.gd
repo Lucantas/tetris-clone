@@ -89,7 +89,7 @@ func _move_piece_left() -> int:
 			if column_limit or not game.is_block_free(next_move):
 				return 0
 				
-	LEFT = int( Input.is_action_pressed( "ui_left" ) )
+	LEFT = int( Input.is_action_just_pressed( "ui_left" ) )
 	
 	return LEFT	
 	
@@ -103,7 +103,7 @@ func _move_piece_right():
 			if column_limit or not game.is_block_free(next_move):
 				return 0
 		
-	RIGHT = int( Input.is_action_pressed( "ui_right" ) )
+	RIGHT = int( Input.is_action_just_pressed( "ui_right" ) )
 	
 	return RIGHT
 	
@@ -141,7 +141,7 @@ func handle_block_visibility(piece):
 	for block in node.piece_blocks:
 		var sprite = block.get_node("block")
 		print(block.global_position.y)
-		if block.global_position.y < 80 or block.global_position.y > 720:
+		if block.global_position.y < 80 or block.global_position.y > 721:
 			sprite.hide()
 		else:
 			sprite.show()
