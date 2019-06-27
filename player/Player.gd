@@ -8,6 +8,8 @@ onready var pieces = [
 					"res://pieces/O_Piece.tscn",
 					"res://pieces/Z_Piece.tscn",
 					"res://pieces/T_Piece.tscn",					
+					"res://pieces/L_Piece.tscn",					
+					"res://pieces/J_Piece.tscn",					
 					]
 					
 var board_center = Vector2(222,128)
@@ -41,12 +43,15 @@ func retrieve_piece():
 		piece = temp.instance()		
 		self.add_child(piece)					
 		handle_block_visibility(piece)	
+		self.rotation_degrees = 0
 		self.position = board_center	
 		can_move = true	
 
 func _handle_piece_rotation():
 	if Input.is_action_just_pressed("ui_up"):
 		self.rotation_degrees += rotation_default
+		for block in self.get_child(0).piece_blocks:
+			block.rotation_degrees -= rotation_default
 		update_grid()
 		
 func _handle_horizontal_move():
@@ -124,7 +129,7 @@ func handle_block_visibility(piece):
 	for block in node.piece_blocks:
 		var sprite = block.get_node("block")
 		print(block.global_position.y)
-		if block.global_position.y < 80:
+		if block.global_position.y < 80 or block.global_position.y > 720:
 			sprite.hide()
 		else:
 			sprite.show()
