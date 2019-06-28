@@ -1,23 +1,25 @@
 extends Node2D
 
+signal score_updated
 const GRID_SIZE = Vector2(32,32)
 
 var row : int = 20
 var column : int = 10
 var paused : bool = false
-var offset_height = 3
-var offset_width = 2
+var offset_height = 2
+var offset_width = 1
 
 var computed_board_row = row + offset_height
 var computed_board_column = column + offset_width
-var show_grid = true
+var show_grid = false
 
+onready var score : int = 0
 onready var grid : Dictionary = create_grid(column, row, 0, show_grid)
 
 onready var game_speed : float = 1
 onready var timer = $Timer
 
-var draw_color = Color(123, 123, 123, 0.1)
+var draw_color = Color(123, 123, 123, 1)
 
 func _ready():	
 	timer.wait_time = 1.5 - (game_speed/10.0)
@@ -29,23 +31,42 @@ func _ready():
 	
 func _process(delta):
 	timer.wait_time = 1.5 - (game_speed/10.0)
+	update_score()
 
 func _draw():
 	draw_board_panel()
 	create_grid(column,row,0,show_grid)
 	
 func draw_board_panel():
+	
 	# right
 	draw_line(
-		Vector2(GRID_SIZE.x * computed_board_column,offset_height * GRID_SIZE.y), 
-		Vector2(GRID_SIZE.x * computed_board_column,GRID_SIZE.y * computed_board_row),
+		Vector2((GRID_SIZE.x * computed_board_column) + 1,offset_height * GRID_SIZE.y), 
+		Vector2((GRID_SIZE.x * computed_board_column) + 1,GRID_SIZE.y * computed_board_row),
 		draw_color,
 		1
 	)
+	
+	# left:
+	draw_line(
+		Vector2((GRID_SIZE.x * offset_width) -1,GRID_SIZE.y * offset_height),
+		Vector2((GRID_SIZE.x * offset_width) -1,GRID_SIZE.y * computed_board_row),
+		draw_color,
+		1
+	)	
+	
 	# bottom
 	draw_line(
-		Vector2(GRID_SIZE.x * offset_width,GRID_SIZE.y * computed_board_row),
-		Vector2(GRID_SIZE.x * computed_board_column,GRID_SIZE.y * computed_board_row),
+		Vector2((GRID_SIZE.x * offset_width) -1,(GRID_SIZE.y * computed_board_row) + 1),
+		Vector2(GRID_SIZE.x * computed_board_column,(GRID_SIZE.y * computed_board_row) + 1),
+		draw_color,
+		1
+	)	
+	
+	# top
+	draw_line(
+		Vector2(GRID_SIZE.x * offset_width,GRID_SIZE.y * offset_height),
+		Vector2(GRID_SIZE.x * computed_board_column, GRID_SIZE.y * offset_height),
 		draw_color,
 		1
 	)	
@@ -147,6 +168,10 @@ func fix_position():
 				block.queue_free()
 
 #TODO: Separate ui stuff
+func update_score():
+	score += 1
+	$UI.score_value.text = str(score)	
+
 func _on_RestartBtn_button_up():
 	new_game()
 
@@ -189,3 +214,4 @@ func _on_Cancel_button_up():
 func _on_Confirm_button_up():
 	$GameOverWdw.hide()
 	new_game()
+
